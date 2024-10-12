@@ -122,6 +122,7 @@
   networkmanagerapplet
   speedtest-cli
   git
+  doublecmd
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
