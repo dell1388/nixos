@@ -8,6 +8,7 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ./nixvim.nix
     ];
 
   # Bootloader.
@@ -89,7 +90,10 @@
   
   programs = {
   firefox.enable = true;
-  steam.enable = true;
+  steam = {
+  	enable = true;
+	gamescopeSession.enable = true;
+	};
   fish.enable = true;
   nh = {
         enable = true;
@@ -105,7 +109,6 @@
   environment.systemPackages = with pkgs; [
   brave
   discord
-  neovim
   spotify
   libreoffice
   gimp
@@ -123,6 +126,7 @@
   speedtest-cli
   git
   doublecmd
+  typst
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
