@@ -127,6 +127,8 @@
   git
   doublecmd
   typst
+  alejandra
+  ruff
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
