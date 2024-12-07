@@ -58,7 +58,9 @@
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
-
+  services.ratbagd = {
+    enable = true;
+    };
   # Enable sound with pipewire.
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
@@ -115,9 +117,9 @@
   vlc
   fastfetch
   killall
-  python3
+  (python3.withPackages (python-pkgs: with python-pkgs; [
+  tabulate]))
   gcc
-  wine
   quickemu
   typst
   nvd
@@ -129,6 +131,10 @@
   typst
   alejandra
   ruff
+  r2modman
+  piper
+  libratbag
+  solaar    
   ];
 
   # Some programs need SUID wrappers, can be configured further or are

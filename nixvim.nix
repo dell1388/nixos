@@ -42,6 +42,48 @@
     };
 
     plugins = {
+      luasnip = {
+        enable = true;
+        settings = {
+          enable_autosnippets = true;
+          store_selection_keys = "<Tab>";
+        };
+        fromVscode = [
+          {
+            lazyLoad = true;
+            paths = "${pkgs.vimPlugins.friendly-snippets}";
+          }
+        ];
+      };
+      cmp-nvim-lsp.enable = true; # lsp
+      cmp-calc.enable = true;
+      cmp-buffer.enable = true;
+      cmp-path.enable = true; # file system paths
+      cmp_luasnip.enable = true; # snippets
+      cmp = {
+        enable = true;
+        settings = {
+          autoEnableSources = true;
+          snippet.expand = "luasnip";
+          experimental.ghost_text = true;
+          preselect = "cmp.PreselectMode.Item";
+          formatting.fields = ["kind" "abbr" "menu"];
+
+          sources = [
+            {name = "nvim_lsp";}
+            {name = "luasnip";}
+            {name = "nvim_lua";}
+            {name = "calc";}
+            {name = "path";}
+            {name = "buffer";}
+          ];
+          mapping = {
+            "<CR>" = "cmp.mapping.confirm({ select = true })";
+            "<C-p>" = "cmp.mapping(function() if cmp.visible() then cmp.select_prev_item({behavior = 'select'}) else cmp.complete() end end)";
+            "<C-n>" = "cmp.mapping(function() if cmp.visible() then cmp.select_next_item({behavior = 'select'}) else cmp.complete() end end)";
+          };
+        };
+      };
       conform-nvim = {
         enable = true;
         settings.formatters_by_ft = {
