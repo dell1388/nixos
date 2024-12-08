@@ -45,6 +45,7 @@
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
+  services.xserver.videoDrivers = ["amdgpu"];
   # Enable the KDE Plasma Desktop Environment.
   services.displayManager.sddm.enable = true;
   services.xserver.desktopManager.plasma5.enable = true;
@@ -128,7 +129,9 @@
   speedtest-cli
   git
   doublecmd
+  wine
   typst
+  lutris
   alejandra
   ruff
   r2modman
