@@ -9,16 +9,9 @@
     [ # Include the results of the hardware scan.
         inputs.home-manager.nixosModules.home-manager
       ./hardware-configuration.nix
-      ./nixvim.nix
     ];
 
-home-manager = {
-    users.dell= import ./home.nix;
-    useGlobalPkgs = true;
-    useUserPackages = true;
-    backupFileExtension = "backup";
-  };
-  # Bootloader.
+ # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
@@ -95,7 +88,13 @@ home-manager = {
     extraGroups = [ "networkmanager" "wheel" ];
     shell = pkgs.fish;
   };
-
+home-manager = {
+    users.dell= import ./home.nix;
+    useGlobalPkgs = true;
+    useUserPackages = true;
+    backupFileExtension = "backup";
+  };
+ 
   nix.settings.experimental-features = ["flakes" "nix-command"];
   
   programs = {
