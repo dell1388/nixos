@@ -2,15 +2,22 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 
 {
   imports =
     [ # Include the results of the hardware scan.
+        inputs.home-manager.nixosModules.home-manager
       ./hardware-configuration.nix
       ./nixvim.nix
     ];
 
+home-manager = {
+    users.dell= import ./home.nix;
+    useGlobalPkgs = true;
+    useUserPackages = true;
+    backupFileExtension = "backup";
+  };
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -110,7 +117,6 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-  brave
   discord
   spotify
   libreoffice
