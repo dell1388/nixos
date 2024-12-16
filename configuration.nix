@@ -7,8 +7,10 @@
 {
   imports =
     [ # Include the results of the hardware scan.
+     	./nixvim.nix
+	 ./hardware-configuration.nix
         inputs.home-manager.nixosModules.home-manager
-      ./hardware-configuration.nix
+
     ];
 
  # Bootloader.
@@ -85,7 +87,7 @@
   users.users.dell = {
     isNormalUser = true;
     description = "dell";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "libvirtd" "wheel" ];
     shell = pkgs.fish;
   };
 home-manager = {

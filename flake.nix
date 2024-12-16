@@ -2,11 +2,10 @@
   description = "Nixos config flake";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:nixOS/nixpkgs/nixos-unstable";
     nix-stable.url = "github:NixOS/nixpkgs/nixos-24.05";
     nixvim = {
     	url = "github:nix-community/nixvim";
-    	inputs.nixpkgs.follows = "nixpkgs";
     };
     home-manager.url = "github:nix-community/home-manager"; # module to manage home config files
     home-manager.inputs.nixpkgs.follows = "nixpkgs";

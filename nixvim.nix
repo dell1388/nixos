@@ -1,8 +1,10 @@
 {
   pkgs,
   config,
+inputs,
   ...
 }: {
+imports = [inputs.nixvim.nixosModules.nixvim];
   programs.nixvim = {
     enable = true;
     opts = {
@@ -42,7 +44,7 @@
     };
 
     plugins = {
-      luasnip = {
+     luasnip = {
         enable = true;
         settings = {
           enable_autosnippets = true;
@@ -127,7 +129,7 @@
           marksman.enable = true;
           nixd.enable = true;
           pyright.enable = true;
-          typst_lsp.enable = true;
+          tinymist.enable = true;
         };
       };
       treesitter = {
@@ -138,17 +140,21 @@
       };
       typst-vim.enable = true;
     };
+           extraConfigLua = ''
+        require("typst-preview").setup()
+    '';
+ 
     extraPlugins = with pkgs.vimPlugins; [
       vim-visual-multi
       (pkgs.vimUtils.buildVimPlugin
         {
           pname = "typst-preview.nvim";
-          version = "0.3.3";
+          version = "1.2.0";
           src = pkgs.fetchFromGitHub {
             owner = "chomosuke";
             repo = "typst-preview.nvim";
-            rev = "0354cc1a7a5174a2e69cdc21c4db9a3ee18bb20a";
-            sha256 = "sha256-n0TfcXJLlRXdS6S9dwYHN688IipVSDLVXEqyYs+ROG8=";
+            rev = "ebf10fabde7406848d165b1ef13bce5d046195be";
+            sha256 = "sha256-J3/xxtTk+NyD/98kBoDFy/Zx0fLht0ILRskKZR6HHUI=";
           };
         })
     ];
