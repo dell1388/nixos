@@ -1,19 +1,60 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
-
-{ config, pkgs, inputs, ... }:
-
 {
-  imports =
-    [ # Include the results of the hardware scan.
-     	./nixvim.nix
-	 ./hardware-configuration.nix
-        inputs.home-manager.nixosModules.home-manager
+  config,
+  pkgs,
+  inputs,
+  ...
+}: {
+  imports = [
+    # Include the results of the hardware scan.
+    ./nixvim.nix
+    ./hardware-configuration.nix
+    inputs.home-manager.nixosModules.home-manager
+    inputs.stylix.nixosModules.stylix
+  ];
 
-    ];
+  stylix = {
+    enable = true;
+    image = ./Wolf_shirt_6.png;
 
- # Bootloader.
+    polarity = "dark";
+
+    opacity = {
+      terminal = 0.7;
+      popups = 0.9;
+    };
+    cursor = {
+      name = "graphite-light";
+      package = pkgs.graphite-cursors;
+      size = 32;
+    };
+
+    fonts = {
+      sizes = {
+        terminal = 13;
+      };
+      monospace = {
+        package = pkgs.nerd-fonts.jetbrains-mono;
+        name = "JetBrainsMono Nerd Font Mono";
+      };
+      sansSerif = {
+        package = pkgs.noto-fonts;
+        name = "NotoSans";
+      };
+      serif = {
+        package = pkgs.noto-fonts;
+        name = "NotoSerif";
+      };
+    };
+
+    targets = {
+      fish.enable = false;
+      nixvim.enable = false;
+    };
+  };
+  # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
@@ -30,6 +71,12 @@
   # Set your time zone.
   time.timeZone = "America/New_York";
 
+  programs.hyprland.enable = true;
+
+  environment.sessionVariables = {
+    WLR_NO_HARDWARE_CURSORS = "1";
+    NIXOS_OZONE_WL = "1";
+  };
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
 
@@ -63,7 +110,7 @@
   services.printing.enable = true;
   services.ratbagd = {
     enable = true;
-    };
+  };
   # Enable sound with pipewire.
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
@@ -87,30 +134,30 @@
   users.users.dell = {
     isNormalUser = true;
     description = "dell";
-    extraGroups = [ "networkmanager" "libvirtd" "wheel" ];
+    extraGroups = ["networkmanager" "libvirtd" "wheel"];
     shell = pkgs.fish;
   };
-home-manager = {
-    users.dell= import ./home.nix;
+  home-manager = {
+    users.dell = import ./home.nix;
     useGlobalPkgs = true;
     useUserPackages = true;
     backupFileExtension = "backup";
   };
- 
+
   nix.settings.experimental-features = ["flakes" "nix-command"];
-  
+
   programs = {
-  firefox.enable = true;
-  steam = {
-  	enable = true;
-	gamescopeSession.enable = true;
-	};
-  fish.enable = true;
-  nh = {
-        enable = true;
-        clean.enable = true;
-        flake = "/home/dell/.config/nixos";
-      }; 
+    firefox.enable = true;
+    steam = {
+      enable = true;
+      gamescopeSession.enable = true;
+    };
+    fish.enable = true;
+    nh = {
+      enable = true;
+      clean.enable = true;
+      flake = "/home/dell/.config/nixos";
+    };
   };
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
@@ -118,33 +165,48 @@ home-manager = {
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-  discord
-  spotify
-  libreoffice
-  gimp
-  vlc
-  fastfetch
-  killall
-  (python3.withPackages (python-pkgs: with python-pkgs; [
-  tabulate]))
-  gcc
-  quickemu
-  typst
-  nvd
-  nix-output-monitor
-  networkmanagerapplet
-  speedtest-cli
-  git
-  doublecmd
-  wine
-  typst
-  lutris
-  alejandra
-  ruff
-  r2modman
-  piper
-  libratbag
-  solaar    
+    discord
+    spotify
+    libreoffice
+    gimp
+    vlc
+    fastfetch
+    wdisplays
+    pavucontrol
+    pulsemixer
+    pasystray
+    hyprpicker
+    hyprpaper
+    wl-clipboard
+    xwaylandvideobridge
+    killall
+    (python3.withPackages (python-pkgs:
+      with python-pkgs; [
+        tabulate
+      ]))
+    gcc
+    quickemu
+    typst
+    nvd
+    nix-output-monitor
+    networkmanagerapplet
+    speedtest-cli
+    git
+    doublecmd
+    wine
+    typst
+    cliphist
+    hyprshot
+    swappy
+    vesktop
+    swaylock
+    lutris
+    alejandra
+    ruff
+    r2modman
+    piper
+    libratbag
+    solaar
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -173,5 +235,4 @@ home-manager = {
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "24.05"; # Did you read the comment?
-
 }

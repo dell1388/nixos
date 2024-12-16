@@ -9,10 +9,7 @@
     };
     home-manager.url = "github:nix-community/home-manager"; # module to manage home config files
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
-    # home-manager = {
-    #   url = "github:nix-community/home-manager";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
+    stylix.url = "github:danth/stylix";
   };
 outputs = inputs: let
     system = "x86_64-linux";
