@@ -1,8 +1,21 @@
-{pkgs, ...}: {
+{
+  config,
+  pkgs,
+  ...
+}: {
   home.stateVersion = "23.11";
-
-wayland.windowManager.hyprland.extraConfig = builtins.readFile ./hyprland.conf;
+  stylix.targets = {
+    fish.enable = false;
+    kde.enable = false;
+  };
+  wayland.windowManager.hyprland.extraConfig = builtins.readFile ./hyprland.conf;
+  wayland.windowManager.hyprland.enable = true;
   programs = {
+  git = {
+      enable = true;
+      userEmail = "benpewittlewis@gmail.com";
+      userName = "dell1388";
+    };
     rofi = {
       enable = true;
       package = pkgs.rofi-wayland;
@@ -18,79 +31,79 @@ wayland.windowManager.hyprland.extraConfig = builtins.readFile ./hyprland.conf;
         display-calc = " ⅀ =>  ";
       };
     };
-    waybar ={
-    enable = true;
-   
-    settings = [
-      {
-        height = 30;
-        spacing = 6;
-        tray = {
-          spacing = 10;
-          show-passive-items = true;
-        };
-        layer = "top";
-        position = "bottom";
-        modules-center = [];
-        modules-right = ["tray" "pulseaudio" "network" "cpu" "memory" "temperature" "disk" "clock#c2" "clock" "custom/mt"];
-        modules-left = ["hyprland/workspaces"];
-        backlight = {
-          format = "{percent}% {icon}";
-          format-icons = ["" ""];
-        };
-       
-        clock = {
-          interval = 1;
-          format = "{:%H:%M:%S}";
-        };
-        "clock#c2".format = "{:%m-%d}";
-        "custom/mt" = {
-          interval = 1;
-          exec = "chron";
-          format = "{}";
-        };
-  
-        cpu = {
-          format = "{usage}% ";
-          tooltip = false;
-        };
-        memory.format = "{}% ";
-        disk.format = "{percentage_used}% ⬤";
-        network = {
-          interval = 1;
-          tooltip-format = "{ifname}: {ipaddr}/{cidr} |  ^ {bandwidthUpBits}, v {bandwidthDownBits} | {essid}";
-          format-disconnected = "⚠";
-          format-ethernet = "{signalStrength} ";
-          format-wifi = "{signalStrength} ";
-          format-linked = "{ifname} (No IP)";
-          on-click = "nm-connection-editor";
-        };
-        pulseaudio = {
-          format = "{volume}% {icon} {format_source}";
-          format-bluetooth = "{volume}% {icon}  {format_source}";
-          format-bluetooth-muted = " {icon}  {format_source}";
-          format-icons = {
-            car = "";
-            default = ["" "" ""];
-            handsfree = "";
-            headphones = "";
-            headset = "";
-            phone = "";
-            portable = "";
+    waybar = {
+      enable = true;
+
+      settings = [
+        {
+          height = 30;
+          spacing = 6;
+          tray = {
+            spacing = 10;
+            show-passive-items = true;
           };
-          format-muted = " {format_source}";
-          format-source = "{volume}% ";
-          format-source-muted = "";
-          on-click = "pavucontrol";
-        };
-        temperature = {
-          critical-threshold = 80;
-          format = "{temperatureC}°C {icon}";
-          format-icons = ["" "" ""];
-        };
-      }
-    ];
-};
+          layer = "top";
+          position = "bottom";
+          modules-center = ["hyprland/window"];
+          modules-right = ["tray" "pulseaudio" "network" "cpu" "memory" "temperature" "disk" "clock#c2" "clock" "custom/mt"];
+          modules-left = ["hyprland/workspaces"];
+          backlight = {
+            format = "{percent}% {icon}";
+            format-icons = ["" ""];
+          };
+
+          clock = {
+            interval = 1;
+            format = "{:%H:%M:%S}";
+          };
+          "clock#c2".format = "{:%m-%d}";
+          "custom/mt" = {
+            interval = 1;
+            exec = "chron";
+            format = "{}";
+          };
+
+          cpu = {
+            format = "{usage}% ";
+            tooltip = false;
+          };
+          memory.format = "{}% ";
+          disk.format = "{percentage_used}% ⬤";
+          network = {
+            interval = 1;
+            tooltip-format = "{ifname}: {ipaddr}/{cidr} |  ^ {bandwidthUpBits}, v {bandwidthDownBits} | {essid}";
+            format-disconnected = "⚠";
+            format-ethernet = "{signalStrength} ";
+            format-wifi = "{signalStrength} ";
+            format-linked = "{ifname} (No IP)";
+            on-click = "nm-connection-editor";
+          };
+          pulseaudio = {
+            format = "{volume}% {icon} {format_source}";
+            format-bluetooth = "{volume}% {icon}  {format_source}";
+            format-bluetooth-muted = " {icon}  {format_source}";
+            format-icons = {
+              car = "";
+              default = ["" "" ""];
+              handsfree = "";
+              headphones = "";
+              headset = "";
+              phone = "";
+              portable = "";
+            };
+            format-muted = " {format_source}";
+            format-source = "{volume}% ";
+            format-source-muted = "";
+            on-click = "pavucontrol";
+          };
+          temperature = {
+            critical-threshold = 80;
+            format = "{temperatureC}°C {icon}";
+            format-icons = ["" "" ""];
+          };
+        }
+      ];
+    };
     kitty = {
       enable = true;
       settings = {
@@ -121,5 +134,33 @@ wayland.windowManager.hyprland.extraConfig = builtins.readFile ./hyprland.conf;
       "--ozone-platform=wayland"
       "--password-store=basic"
     ];
+  };
+  services = {
+    dunst = {
+      enable = true;
+      iconTheme = {
+        name = "Adwaita";
+        package = pkgs.adwaita-icon-theme;
+        size = "16x16";
+      };
+      settings = {
+        global = {
+          monitor = 0;
+          geometry = "600x50-5+25";
+          shrink = "yes";
+          padding = 16;
+          horizontal_padding = 16;
+          line_height = 4;
+          format = "<b>%s</b>\\n%b";
+          corner_radius = 20;
+        };
+      };
+    };
+    hyprpaper = {
+      enable = true;
+      settings = {
+        wallpapers = [",${config.stylix.image}"];
+      };
+    };
   };
 }

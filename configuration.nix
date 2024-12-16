@@ -17,7 +17,7 @@
 
   stylix = {
     enable = true;
-    image = ./Wolf_shirt_6.png;
+    image = ./1626531282635.jpg;
 
     polarity = "dark";
 
@@ -165,8 +165,8 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    discord
     spotify
+    libnotify
     libreoffice
     gimp
     vlc
@@ -175,6 +175,7 @@
     pavucontrol
     pulsemixer
     pasystray
+    btop
     hyprpicker
     hyprpaper
     wl-clipboard
