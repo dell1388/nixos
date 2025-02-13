@@ -37,9 +37,9 @@
       settings = [
         {
           height = 30;
-          spacing = 6;
+          spacing = 10;
           tray = {
-            spacing = 10;
+            spacing = 20;
             show-passive-items = true;
           };
           layer = "top";
@@ -79,7 +79,7 @@
             on-click = "nm-connection-editor";
           };
           pulseaudio = {
-            format = "{volume}% {icon} {format_source}";
+            format = "{volume}% {icon}   {format_source}";
             format-bluetooth = "{volume}% {icon}  {format_source}";
             format-bluetooth-muted = " {icon}  {format_source}";
             format-icons = {

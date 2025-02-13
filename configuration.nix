@@ -17,7 +17,7 @@
 
   stylix = {
     enable = true;
-    image = ./1626531282635.jpg;
+    image = ./CTR_6868.jpg;
 
     polarity = "dark";
 
@@ -67,6 +67,12 @@
 
   # Enable networking
   networking.networkmanager.enable = true;
+  networking = {
+    firewall = {
+      enable = true;
+      allowedTCPPorts = [22];
+    };
+  };
 
   # Set your time zone.
   time.timeZone = "America/New_York";
@@ -105,7 +111,31 @@
     variant = "";
     options = "caps:escape";
   };
+  services.openssh = {
+    enable = true;
+    ports = [22];
+    # settings = {
+    #   PasswordAuthentication = false;
+    #   AllowUsers = null; # Allows all users by default. Can be [ "user1" "user2" ]
+    #   UseDns = true;
+    #   X11Forwarding = false;
+    #   PermitRootLogin = "yes"; # "yes", "without-password", "prohibit-password", "forced-commands-only", "no"
+    # };
+  };
+  services.fail2ban.enable = true;
+  # services.udev.extraRules = ''
+  #   KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{serial}=="*vial:f64c2b3c*", MODE="0660", GROUP="users", TAG+="uaccess", TAG+="udev-acl"
+  # '';
+  services.udev.packages = [
+    (pkgs.writeTextFile {
+      name = "92-viia.rules";
+      text = ''
+        KERNEL=="hidraw*", SUBSYSTEM=="hidraw", MODE="0660", GROUP="users", TAG+="uaccess", TAG+="udev-acl"
+      '';
 
+      destination = "/etc/udev/rules.d/92-viia.rules";
+    })
+  ];
   # Enable CUPS to print documents.
   services.printing.enable = true;
   services.ratbagd = {
@@ -147,6 +177,8 @@
   nix.settings.experimental-features = ["flakes" "nix-command"];
 
   programs = {
+    nix-ld.enable = true;
+    nix-ld.libraries = with pkgs; [glib gtk3];
     firefox.enable = true;
     steam = {
       enable = true;
@@ -194,20 +226,29 @@
     speedtest-cli
     git
     doublecmd
-    wine
     typst
     cliphist
     hyprshot
     swappy
+    tinymist
     vesktop
     swaylock
+    wine
     lutris
     alejandra
     ruff
     r2modman
     piper
     libratbag
+    via
     solaar
+    jdk
+    vscode
+    gradle
+    tmate
+    octave
+    anydesk
+    gtk3
   ];
 
   # Some programs need SUID wrappers, can be configured further or are

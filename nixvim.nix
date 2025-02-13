@@ -1,10 +1,10 @@
 {
   pkgs,
   config,
-inputs,
+  inputs,
   ...
 }: {
-imports = [inputs.nixvim.nixosModules.nixvim];
+  imports = [inputs.nixvim.nixosModules.nixvim];
   programs.nixvim = {
     enable = true;
     opts = {
@@ -44,7 +44,8 @@ imports = [inputs.nixvim.nixosModules.nixvim];
     };
 
     plugins = {
-     luasnip = {
+      markdown-preview.enable = true;
+      luasnip = {
         enable = true;
         settings = {
           enable_autosnippets = true;
@@ -127,9 +128,18 @@ imports = [inputs.nixvim.nixosModules.nixvim];
           jsonls.enable = true;
           ltex.enable = true;
           marksman.enable = true;
-          nixd.enable = true;
+          nixd = {
+            enable = true;
+            extraOptions.offset_encoding = "utf-8";
+          };
           pyright.enable = true;
-          tinymist.enable = true;
+          matlab_ls.enable = true;
+          #  typst-lsp.enable = true;
+          tinymist = {
+            enable = true;
+            extraOptions.offset_encoding = "utf-8";
+            settings.exportPdf = "onSave";
+          };
         };
       };
       treesitter = {
@@ -140,10 +150,10 @@ imports = [inputs.nixvim.nixosModules.nixvim];
       };
       typst-vim.enable = true;
     };
-           extraConfigLua = ''
-        require("typst-preview").setup()
+    extraConfigLua = ''
+      require("typst-preview").setup()
     '';
- 
+
     extraPlugins = with pkgs.vimPlugins; [
       vim-visual-multi
       (pkgs.vimUtils.buildVimPlugin
