@@ -2,9 +2,10 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 {
-  config,
+  system,
   pkgs,
   inputs,
+  config,
   ...
 }: {
   imports = [
@@ -14,7 +15,7 @@
     inputs.home-manager.nixosModules.home-manager
     inputs.stylix.nixosModules.stylix
   ];
-virtualisation.waydroid.enable = true;
+  virtualisation.waydroid.enable = true;
   stylix = {
     enable = true;
     image = ./CTR_6868.jpg;
@@ -99,8 +100,10 @@ virtualisation.waydroid.enable = true;
   };
 
   # Enable the X11 windowing system.
-  services.xserver.enable = true;
-  services.xserver.videoDrivers = ["amdgpu"];
+  services.xserver = {
+    enable = true;
+    videoDrivers = ["amdgpu"];
+  };
   # Enable the KDE Plasma Desktop Environment.
   services.displayManager.sddm.enable = true;
   services.xserver.desktopManager.plasma5.enable = true;
@@ -137,24 +140,19 @@ virtualisation.waydroid.enable = true;
     })
   ];
   # Enable CUPS to print documents.
-  services.printing.enable = true;
-  services.ratbagd = {
-    enable = true;
-  };
-  # Enable sound with pipewire.
-  hardware.pulseaudio.enable = false;
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
 
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
+  security.rtkit.enable = true;
+  # Enable sound with pipewire.
+  services = {
+    pulseaudio.enable = false;
+    pipewire = {
+      enable = true;
+      alsa.enable = true;
+      alsa.support32Bit = true;
+      pulse.enable = true;
+    };
+    printing.enable = true;
+    ratbagd.enable = true;
   };
 
   # Enable touchpad support (enabled default in most desktopManager).
@@ -177,8 +175,10 @@ virtualisation.waydroid.enable = true;
   nix.settings.experimental-features = ["flakes" "nix-command"];
 
   programs = {
-    nix-ld.enable = true;
-    nix-ld.libraries = with pkgs; [glib xorg.libXxf86vm gtk3];
+    nix-ld = {
+      enable = true;
+      libraries = with pkgs; [glib xorg.libXxf86vm gtk3];
+    };
     firefox.enable = true;
     steam = {
       enable = true;
@@ -191,8 +191,23 @@ virtualisation.waydroid.enable = true;
       flake = "/home/dell/.config/nixos";
     };
   };
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
+
+  nixpkgs.pkgs = let
+    overlays = [
+      (final: _prev: {
+        stable = import inputs.stable {
+          system = final.system;
+          config.allowUnfree = true;
+        };
+      })
+    ];
+
+    pkgs = import inputs.nixpkgs {
+      inherit overlays system;
+      config.allowUnfree = true;
+    };
+  in
+    pkgs;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -226,7 +241,7 @@ virtualisation.waydroid.enable = true;
     speedtest-cli
     git
     doublecmd
-    typst
+    curl
     cliphist
     hyprshot
     swappy
@@ -242,7 +257,7 @@ virtualisation.waydroid.enable = true;
     libratbag
     via
     solaar
-    (jdk.override{enableJavaFX = true;})
+    (jdk.override {enableJavaFX = true;})
     vscode
     gradle
     tmate
