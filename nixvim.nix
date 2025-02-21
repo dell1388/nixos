@@ -45,6 +45,7 @@
 
     plugins = {
       markdown-preview.enable = true;
+      autoclose.enable = true;
       luasnip = {
         enable = true;
         settings = {

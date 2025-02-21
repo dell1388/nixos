@@ -14,7 +14,7 @@
     inputs.home-manager.nixosModules.home-manager
     inputs.stylix.nixosModules.stylix
   ];
-
+virtualisation.waydroid.enable = true;
   stylix = {
     enable = true;
     image = ./CTR_6868.jpg;
@@ -178,7 +178,7 @@
 
   programs = {
     nix-ld.enable = true;
-    nix-ld.libraries = with pkgs; [glib gtk3];
+    nix-ld.libraries = with pkgs; [glib xorg.libXxf86vm gtk3];
     firefox.enable = true;
     steam = {
       enable = true;
@@ -242,7 +242,7 @@
     libratbag
     via
     solaar
-    jdk
+    (jdk.override{enableJavaFX = true;})
     vscode
     gradle
     tmate
