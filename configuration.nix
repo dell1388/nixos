@@ -213,6 +213,7 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     spotify
+    prismlauncher
     libnotify
     libreoffice
     gimp
