@@ -56,24 +56,26 @@
         };
       };
 
-      harpoon = {
-        # lets you quickly save common files and teleport to them
-        enable = true;
-        menu = {
-          width = 100;
-          height = 6;
-        };
-        keymaps = {
-          addFile = "<leader>a"; # save current file to list of files
-          toggleQuickMenu = "<leader>s"; # show list of files
-          navFile = {
-            "1" = "<C-A-j>"; # `control alt j` for first file in list
-            "2" = "<C-A-k>";
-            "3" = "<C-A-l>";
-            "4" = "<C-A-;>";
-          };
-        };
-      };
+      # harpoon = {
+      #   # lets you quickly save common files and teleport to them
+      #   enable = true;
+      #   settings = {
+      #     menu = {
+      #       width = 100;
+      #       height = 6;
+      #     };
+      #     keymaps = {
+      #       addFile = "<leader>a"; # save current file to list of files
+      #       toggleQuickMenu = "<leader>s"; # show list of files
+      #       navFile = {
+      #         "1" = "<C-A-j>"; # `control alt j` for first file in list
+      #         "2" = "<C-A-k>";
+      #         "3" = "<C-A-l>";
+      #         "4" = "<C-A-;>";
+      #       };
+      #     };
+      #   };
+      # };
 
       todo-comments.enable = true; # TODO: lets you do this, # FIX: and this, # BUG: and this
 

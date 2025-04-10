@@ -97,6 +97,7 @@
     LC_PAPER = "en_US.UTF-8";
     LC_TELEPHONE = "en_US.UTF-8";
     LC_TIME = "en_US.UTF-8";
+
   };
 
   # Enable the X11 windowing system.
@@ -105,8 +106,8 @@
     videoDrivers = ["amdgpu"];
   };
   # Enable the KDE Plasma Desktop Environment.
-  services.displayManager.sddm.enable = true;
-  services.xserver.desktopManager.plasma5.enable = true;
+  # services.displayManager.sddm.enable = true;
+  # services.desktopManager.plasma6.enable = true;
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -177,7 +178,7 @@
   programs = {
     nix-ld = {
       enable = true;
-      libraries = with pkgs; [glib xorg.libXxf86vm gtk3];
+      libraries = with pkgs; [glib xorg.libXxf86vm gtk3 xorg.libX11 libGL xorg.libXtst alsa-lib];
     };
     firefox.enable = true;
     steam = {
@@ -215,6 +216,7 @@
     spotify
     prismlauncher
     libnotify
+    ffmpeg
     libreoffice
     gimp
     vlc
@@ -227,7 +229,7 @@
     hyprpicker
     hyprpaper
     wl-clipboard
-    xwaylandvideobridge
+    kdePackages.xwaylandvideobridge
     killall
     (python3.withPackages (python-pkgs:
       with python-pkgs; [
@@ -258,6 +260,7 @@
     libratbag
     via
     solaar
+    openjfx23
     (jdk.override {enableJavaFX = true;})
     vscode
     gradle
