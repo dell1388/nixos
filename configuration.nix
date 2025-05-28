@@ -16,6 +16,7 @@
     inputs.stylix.nixosModules.stylix
   ];
   virtualisation.waydroid.enable = true;
+  virtualisation.virtualbox.host.enable = true;
   stylix = {
     enable = true;
     image = ./CTR_6868.jpg;
@@ -106,8 +107,8 @@
     videoDrivers = ["amdgpu"];
   };
   # Enable the KDE Plasma Desktop Environment.
-  # services.displayManager.sddm.enable = true;
-  # services.desktopManager.plasma6.enable = true;
+   services.displayManager.sddm.enable = true;
+   services.desktopManager.plasma6.enable = true;
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -115,6 +116,7 @@
     variant = "";
     options = "caps:escape";
   };
+  services.flatpak.enable = true;
   services.openssh = {
     enable = true;
     ports = [22];
@@ -163,9 +165,10 @@
   users.users.dell = {
     isNormalUser = true;
     description = "dell";
-    extraGroups = ["networkmanager" "libvirtd" "wheel"];
+    extraGroups = ["networkmanager" "libvirtd" "wheel""vboxusers"];
     shell = pkgs.fish;
   };
+  # virtualisation.libvirtd.enable = true;
   home-manager = {
     users.dell = import ./home.nix;
     useGlobalPkgs = true;
@@ -214,7 +217,9 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     spotify
+    # qemu virt-manager
     prismlauncher
+    virtualbox
     libnotify
     ffmpeg
     libreoffice
@@ -251,7 +256,7 @@
     tinymist
     vesktop
     swaylock
-    wine
+    # wine
     lutris
     alejandra
     ruff
@@ -267,7 +272,18 @@
     tmate
     octave
     anydesk
-    gtk3
+   gtk3
+   tesseract5
+   grim
+   mutt
+    windsurf
+    # adobe-reader
+    freecad
+    librecad
+    p3x-onenote
+    wineWowPackages.stable
+    winetricks
+    qdirstat
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
