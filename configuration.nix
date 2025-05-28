@@ -168,7 +168,7 @@
     extraGroups = ["networkmanager" "libvirtd" "wheel""vboxusers"];
     shell = pkgs.fish;
   };
-  # virtualisation.libvirtd.enable = true;
+  virtualisation.libvirtd.enable = true;
   home-manager = {
     users.dell = import ./home.nix;
     useGlobalPkgs = true;
@@ -217,8 +217,8 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     spotify
-    # qemu virt-manager
     prismlauncher
+    quickemu
     virtualbox
     libnotify
     ffmpeg
