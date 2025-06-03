@@ -19,12 +19,11 @@
   virtualisation.virtualbox.host.enable = true;
   stylix = {
     enable = true;
-    image = ./CTR_6868.jpg;
-
+    image = ./foxbat.jpg;
+    base16Scheme = "${pkgs.base16-schemes}/share/themes/primer-dark.yaml";
     polarity = "dark";
-
     opacity = {
-      terminal = 0.7;
+      # terminal = 0.8;
       popups = 0.9;
     };
     cursor = {
@@ -80,6 +79,12 @@
   time.timeZone = "America/New_York";
 
   programs.hyprland.enable = true;
+
+environment.variables ={
+EDITOR = "nvim";
+VISUAL = "nvim";
+TERMINAL = "kitty";
+};
 
   environment.sessionVariables = {
     WLR_NO_HARDWARE_CURSORS = "1";
@@ -284,6 +289,8 @@
     wineWowPackages.stable
     winetricks
     qdirstat
+    xautoclick  
+    neofetch
   ];
 
   # Some programs need SUID wrappers, can be configured further or are

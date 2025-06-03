@@ -107,7 +107,7 @@
     kitty = {
       enable = true;
       settings = {
-        enable_audio_bell = false;
+        enable_audio_bell = true;
         confirm_os_window_close = "0";
       };
       extraConfig = ''
@@ -159,7 +159,7 @@
     hyprpaper = {
       enable = true;
       settings = {
-        wallpapers = [",${config.stylix.image}"];
+        wallpaper = [",${config.stylix.image}"];
       };
     };
   };
