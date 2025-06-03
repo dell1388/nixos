@@ -20,7 +20,7 @@
   stylix = {
     enable = true;
     image = ./f15.jpg;
-    # base16Scheme = "${pkgs.base16-schemes}/share/themes/primer-dark.yaml";
+    base16Scheme = "${pkgs.base16-schemes}/share/themes/harmonic16-dark.yaml";
     polarity = "dark";
     opacity = {
       # terminal = 0.8;
