@@ -19,8 +19,8 @@
   virtualisation.virtualbox.host.enable = true;
   stylix = {
     enable = true;
-    image = ./f15.jpg;
-    # base16Scheme = "${pkgs.base16-schemes}/share/themes/primer-dark.yaml";
+    image = ./f16.jpg;
+    base16Scheme = "${pkgs.base16-schemes}/share/themes/primer-dark.yaml";
     polarity = "dark";
     opacity = {
       # terminal = 0.8;
