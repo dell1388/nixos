@@ -186,7 +186,7 @@ TERMINAL = "kitty";
   programs = {
     nix-ld = {
       enable = true;
-      libraries = with pkgs; [glib xorg.libXxf86vm gtk3 xorg.libX11 libGL xorg.libXtst alsa-lib];
+      libraries = with pkgs; [openjfx24 jdk glib xorg.libXxf86vm gtk3 xorg.libX11 libGL xorg.libXtst alsa-lib ];
     };
     firefox.enable = true;
     steam = {
@@ -270,7 +270,7 @@ TERMINAL = "kitty";
     libratbag
     via
     solaar
-    openjfx23
+    openjfx24
     (jdk.override {enableJavaFX = true;})
     vscode
     gradle
@@ -291,6 +291,7 @@ TERMINAL = "kitty";
     qdirstat
     xautoclick  
     neofetch
+    anki
   ];
 
   # Some programs need SUID wrappers, can be configured further or are

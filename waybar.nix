@@ -6,11 +6,115 @@
 programs.waybar = {
       enable = true;
 style = ''
-   #clock, #cpu{
-    border: 1px solid #d5c4a1;
-    border-radius: 1px;
-    padding: 2px 4px;
+* {
+    font-family: "JetBrainsMono Nerd Font Mono";
+    font-size: 10pt;
+
+}
+window#waybar, tooltip {
+    background: alpha(@base00, 1.000000);
+    color: @base05;
+}
+
+tooltip {
+    border-color: @base0C;
+}
+#wireplumber,
+#pulseaudio,
+#sndio {
+    padding: 0 5px;
+}
+#wireplumber.muted,
+#pulseaudio.muted,
+#sndio.muted {
+    padding: 0 5px;
+}
+#upower,
+#battery {
+    padding: 0 5px;
+}
+#upower.charging,
+#battery.Charging {
+    padding: 0 5px;
+}
+#network {
+    padding: 0 5px;
+}
+#network.disconnected {
+    padding: 0 5px;
+}
+#user {
+    padding: 0 5px;
+}
+#clock {
+    padding: 0 5px;
+}
+#backlight {
+    padding: 0 5px;
+}
+#cpu {
+    padding: 0 5px;
+}
+#disk {
+    padding: 0 5px;
+}
+#idle_inhibitor {
+    padding: 0 5px;
+}
+#temperature {
+    padding: 0 5px;
+}
+#mpd {
+    padding: 0 5px;
+}
+#language {
+    padding: 0 5px;
+}
+#keyboard-state {
+    padding: 0 5px;
+}
+#memory {
+    padding: 0 5px;
+}
+#window {
+    padding: 0 5px;
+}
+
+.modules-left  {
+padding: 0px 11px 0px 11px; 
+background-color:@base00;
+ 	min-width: 1px;
+	color: @base07;
+}
+.modules-left #workspaces button.focused,
+.modules-left #workspaces button.active {
+    border-bottom: 3px solid @base04;
+    padding: 0px 11px 0px 11px;
+    background-color:@base02;
+    color: @base07;
+}
+.modules-center #workspaces button {
+    border-bottom: 3px solid transparent;
+}
+.modules-center #workspaces button.focused,
+.modules-center #workspaces button.active {
+    border-bottom: 3px solid @base05;
+}
+.modules-right{
+}
+.modules-right #workspaces button.focused,
+.modules-right #workspaces button.active {
+    
+}
+
+    #workspaces{
+    }
+   #clock, #network, #memory, #pulseaudio, #disk, #cpu, #tray{
+    color: @base00;
+    border-radius: 2px;
+    padding: 5px 4px;
     margin: 2px;
+    background-color:@base02;
   }
 '';
     settings = [
@@ -23,7 +127,7 @@ style = ''
             show-passive-items = true;
           };
           layer = "top";
-          position = "bottom";
+          position = "top";
           modules-center = ["hyprland/window"];
           modules-right = ["tray" "pulseaudio" "network" "cpu" "memory" "temperature" "disk" "clock#c2" "clock" "custom/mt"];
           modules-left = ["hyprland/workspaces"];
