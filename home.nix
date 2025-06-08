@@ -32,6 +32,7 @@ imports=[./waybar.nix];
         display-calc = " ⅀ =>  ";
       };
     };
+    
 #     waybar = {
 #       enable = true;
 # style = ''

@@ -20,7 +20,25 @@
   stylix = {
     enable = true;
     image = ./f15.jpg;
-    base16Scheme = "${pkgs.base16-schemes}/share/themes/harmonic16-dark.yaml";
+    base16Scheme = {
+      scheme = "Fighter Cockpit";
+      base00 = "1a1a1a"; # Dark gray background
+      base01 = "2e2e2e";
+      base02 = "454545";
+      base03 = "5c5c5c";
+      base04 = "808080";
+      base05 = "a8a8a8";
+      base06 = "d0d0d0";
+      base07 = "f5f5f5";
+      base08 = "f21501"; # Bright red
+      base09 = "2e90ff"; # Blue
+      base0A = "ffcc00"; # Yellow   
+      base0B = "38ff4e"; # HUD green
+      base0C = "38ff4e"; # HUD green
+      base0D = "38ff4e"; # HUD green
+      base0E = "f21501"; # Red
+      base0F = "ff8115"; # Orange
+    };
     polarity = "dark";
     opacity = {
       # terminal = 0.8;
@@ -51,8 +69,8 @@
     };
 
     targets = {
-      fish.enable = false;
-      nixvim.enable = false;
+      fish.enable = true;
+      nixvim.enable = true;
     };
   };
   # Bootloader.
@@ -80,11 +98,11 @@
 
   programs.hyprland.enable = true;
 
-environment.variables ={
-EDITOR = "nvim";
-VISUAL = "nvim";
-TERMINAL = "kitty";
-};
+  environment.variables = {
+    EDITOR = "nvim";
+    VISUAL = "nvim";
+    TERMINAL = "kitty";
+  };
 
   environment.sessionVariables = {
     WLR_NO_HARDWARE_CURSORS = "1";
@@ -103,7 +121,6 @@ TERMINAL = "kitty";
     LC_PAPER = "en_US.UTF-8";
     LC_TELEPHONE = "en_US.UTF-8";
     LC_TIME = "en_US.UTF-8";
-
   };
 
   # Enable the X11 windowing system.
@@ -112,8 +129,8 @@ TERMINAL = "kitty";
     videoDrivers = ["amdgpu"];
   };
   # Enable the KDE Plasma Desktop Environment.
-   services.displayManager.sddm.enable = true;
-   services.desktopManager.plasma6.enable = true;
+  services.displayManager.sddm.enable = true;
+  services.desktopManager.plasma6.enable = true;
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -170,7 +187,7 @@ TERMINAL = "kitty";
   users.users.dell = {
     isNormalUser = true;
     description = "dell";
-    extraGroups = ["networkmanager" "libvirtd" "wheel""vboxusers"];
+    extraGroups = ["networkmanager" "libvirtd" "wheel" "vboxusers"];
     shell = pkgs.fish;
   };
   virtualisation.libvirtd.enable = true;
@@ -186,7 +203,7 @@ TERMINAL = "kitty";
   programs = {
     nix-ld = {
       enable = true;
-      libraries = with pkgs; [openjfx24 jdk glib xorg.libXxf86vm gtk3 xorg.libX11 libGL xorg.libXtst alsa-lib ];
+      libraries = with pkgs; [openjfx24 jdk glib xorg.libXxf86vm gtk3 xorg.libX11 libGL xorg.libXtst alsa-lib];
     };
     firefox.enable = true;
     steam = {
@@ -277,10 +294,10 @@ TERMINAL = "kitty";
     tmate
     octave
     anydesk
-   gtk3
-   tesseract5
-   grim
-   mutt
+    gtk3
+    tesseract5
+    grim
+    mutt
     windsurf
     # adobe-reader
     freecad
@@ -289,9 +306,18 @@ TERMINAL = "kitty";
     wineWowPackages.stable
     winetricks
     qdirstat
-    xautoclick  
-    neofetch
+    xautoclick
     anki
+    fastfetch
+    eww
+    mpv
+    wlogout
+    papirus-icon-theme
+    orbitron
+    exo
+    lxappearance
+    pywal
+    conky
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
