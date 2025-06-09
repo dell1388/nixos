@@ -309,7 +309,7 @@
     xautoclick
     anki
     fastfetch
-    eww
+    eww-wayland
     mpv
     wlogout
     papirus-icon-theme
