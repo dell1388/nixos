@@ -4,13 +4,14 @@
   ...
 }: {
 imports=[./waybar.nix];
-  home.stateVersion = "23.11";
+
   stylix.targets = {
     fish.enable = false;
     kde.enable = false;
   };
   wayland.windowManager.hyprland.extraConfig = builtins.readFile ./hyprland.conf;
   wayland.windowManager.hyprland.enable = true;
+  home.file."whyhellothere".text = ''skill issue'';
   programs = {
   git = {
       enable = true;

@@ -279,6 +279,7 @@
     vesktop
     swaylock
     # wine
+    # discord 
     lutris
     alejandra
     ruff
@@ -318,6 +319,7 @@
     lxappearance
     pywal
     conky
+
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
