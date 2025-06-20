@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Su-30 Flanker HUD System Monitor</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: transparent;
+            color: #38ff4e;
+            font-family: 'Orbitron', monospace;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+            font-weight: 700;
+        }
+
+        .hud-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            background: transparent;
+        }
+
+        /* Flight Path Vector */
+        .fpv {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 30px;
+            height: 30px;
+            z-index: 10;
+        }
+
+        .fpv-circle {
+            width: 30px;
+            height: 30px;
+            border: 3px solid #38ff4e;
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .fpv-wings {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .fpv-wings::before {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 3px;
+            background: #38ff4e;
+            left: -35px;
+            top: -1px;
+        }
+
+        .fpv-wings::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 3px;
+            background: #38ff4e;
+            right: -35px;
+            top: -1px;
+        }
+
+        /* Altitude Scale */
+        .altitude-tape {
+            position: absolute;
+            right: 80px;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 400px;
+            width: 60px;
+        }
+
+        .altitude-numbers {
+            color: #38ff4e;
+            font-size: 18px;
+            text-align: right;
+            line-height: 40px;
+        }
+
+        .altitude-current {
+            position: absolute;
+            right: -80px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #38ff4e;
+            padding: 5px 10px;
+            font-size: 24px;
+            font-weight: 900;
+        }
+
+        /* Speed Scale */
+        .speed-tape {
+            position: absolute;
+            left: 80px;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 400px;
+            width: 60px;
+        }
+
+        .speed-numbers {
+            color: #38ff4e;
+            font-size: 18px;
+            text-align: left;
+            line-height: 40px;
+        }
+
+        .speed-current {
+            position: absolute;
+            left: -80px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #38ff4e;
+            padding: 5px 10px;
+            font-size: 24px;
+            font-weight: 900;
+        }
+
+        /* Heading Scale */
+        .heading-tape {
+            position: absolute;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 40px;
+            overflow: hidden;
+        }
+
+        .heading-scale {
+            display: flex;
+            align-items: center;
+            height: 100%;
+            font-size: 16px;
+            color: #38ff4e;
+        }
+
+        .heading-current {
+            position: absolute;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #38ff4e;
+            padding: 5px 15px;
+            font-size: 20px;
+            font-weight: 900;
+        }
+
+        /* Target Brackets */
+        .target-bracket {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border: 3px solid #38ff4e;
+            border-radius: 0;
+        }
+
+        .target-bracket::before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            border: 3px solid transparent;
+        }
+
+        .target-1 {
+            top: 200px;
+            left: 300px;
+            transform: rotate(15deg);
+        }
+
+        .target-2 {
+            top: 400px;
+            right: 250px;
+            transform: rotate(-10deg);
+        }
+
+        /* System Status Top Left */
+        .status-top-left {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            font-size: 16px;
+            line-height: 1.4;
+        }
+
+        /* System Info Top Right */
+        .status-top-right {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            font-size: 16px;
+            line-height: 1.4;
+            text-align: right;
+        }
+
+        /* Bottom Status */
+        .status-bottom {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 14px;
+            text-align: center;
+        }
+
+        /* Bottom Left Corner */
+        .corner-bottom-left {
+            position: absolute;
+            bottom: 30px;
+            left: 30px;
+            font-size: 16px;
+        }
+
+        /* Bottom Right Corner */
+        .corner-bottom-right {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            font-size: 16px;
+            text-align: right;
+        }
+
+        /* Angular Brackets */
+        .bracket {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+        }
+
+        .bracket-tl {
+            top: 150px;
+            left: 200px;
+            border-top: 3px solid #38ff4e;
+            border-left: 3px solid #38ff4e;
+        }
+
+        .bracket-tr {
+            top: 150px;
+            right: 200px;
+            border-top: 3px solid #38ff4e;
+            border-right: 3px solid #38ff4e;
+        }
+
+        .bracket-bl {
+            bottom: 150px;
+            left: 200px;
+            border-bottom: 3px solid #38ff4e;
+            border-left: 3px solid #38ff4e;
+        }
+
+        .bracket-br {
+            bottom: 150px;
+            right: 200px;
+            border-bottom: 3px solid #38ff4e;
+            border-right: 3px solid #38ff4e;
+        }
+
+        /* Pitch Ladder */
+        .pitch-ladder {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            height: 300px;
+        }
+
+        .pitch-line {
+            position: absolute;
+            height: 2px;
+            background: #38ff4e;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .pitch-10 { top: 20%; width: 100px; }
+        .pitch-5 { top: 35%; width: 60px; }
+        .pitch-0 { top: 50%; width: 120px; }
+        .pitch-minus-5 { top: 65%; width: 60px; }
+        .pitch-minus-10 { top: 80%; width: 100px; }
+
+        /* Range Info */
+        .range-info {
+            position: absolute;
+            top: 50%;
+            left: 400px;
+            transform: translateY(-50%);
+            font-size: 14px;
+        }
+
+        .weapon-status {
+            position: absolute;
+            bottom: 100px;
+            left: 30px;
+            font-size: 14px;
+        }
+
+        /* Blinking elements */
+        .blink {
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
+        }
+
+        /* Warning text */
+        .warning {
+            color: #ffaa00;
+        }
+
+        .critical {
+            color: #ff4444;
+        }
+    </style>
+</head>
+<body>
+    <div class="hud-container">
+        <!-- Flight Path Vector -->
+        <div class="fpv">
+            <div class="fpv-circle">
+                <div class="fpv-wings"></div>
+            </div>
+        </div>
+
+        <!-- Pitch Ladder -->
+        <div class="pitch-ladder">
+            <div class="pitch-line pitch-10"></div>
+            <div class="pitch-line pitch-5"></div>
+            <div class="pitch-line pitch-0"></div>
+            <div class="pitch-line pitch-minus-5"></div>
+            <div class="pitch-line pitch-minus-10"></div>
+        </div>
+
+        <!-- Corner Brackets -->
+        <div class="bracket bracket-tl"></div>
+        <div class="bracket bracket-tr"></div>
+        <div class="bracket bracket-bl"></div>
+        <div class="bracket bracket-br"></div>
+
+        <!-- Altitude Tape -->
+        <div class="altitude-tape">
+            <div class="altitude-numbers">
+                <div>900</div>
+                <div>850</div>
+                <div>800</div>
+                <div>750</div>
+                <div>700</div>
+                <div>650</div>
+                <div>600</div>
+                <div>550</div>
+                <div>500</div>
+                <div>450</div>
+            </div>
+            <div class="altitude-current" id="altitude">672</div>
+        </div>
+
+        <!-- Speed Tape -->
+        <div class="speed-tape">
+            <div class="speed-numbers">
+                <div>600</div>
+                <div>550</div>
+                <div>500</div>
+                <div>450</div>
+                <div>400</div>
+                <div>350</div>
+                <div>300</div>
+                <div>250</div>
+                <div>200</div>
+                <div>150</div>
+            </div>
+            <div class="speed-current" id="speed">385</div>
+        </div>
+
+        <!-- Heading Tape -->
+        <div class="heading-tape">
+            <div class="heading-scale">
+                <span style="margin: 0 30px;">240</span>
+                <span style="margin: 0 30px;">250</span>
+                <span style="margin: 0 30px;">260</span>
+                <span style="margin: 0 30px;">270</span>
+                <span style="margin: 0 30px;">280</span>
+                <span style="margin: 0 30px;">290</span>
+                <span style="margin: 0 30px;">300</span>
+            </div>
+            <div class="heading-current" id="heading">273°</div>
+        </div>
+
+        <!-- Target Brackets -->  
+        <div class="target-bracket target-1"></div>
+        <div class="target-bracket target-2"></div>
+
+        <!-- Top Left Status -->
+        <div class="status-top-left">
+            <div>CPU <span id="cpu-load">23</span>%</div>
+            <div>MEM <span id="mem-usage">51</span>%</div>
+            <div>TMP <span id="cpu-temp">42</span>°C</div>
+        </div>
+
+        <!-- Top Right Status -->
+        <div class="status-top-right">
+            <div>NET ↓<span id="net-down">54.2</span></div>
+            <div>NET ↑<span id="net-up">12.8</span></div>
+            <div>DSK <span id="disk-usage">46</span>%</div>
+        </div>
+
+        <!-- Range Info -->
+        <div class="range-info">
+            <div>RNG</div>
+            <div>2.4KM</div>
+        </div>
+
+        <!-- Weapon Status -->
+        <div class="weapon-status">
+            <div>PROC <span id="proc-count">247</span></div>
+            <div>LOAD <span id="load-avg">1.23</span></div>
+        </div>
+
+        <!-- Bottom Status -->
+        <div class="status-bottom">
+            <div>SYS STATUS: <span class="blink">OPERATIONAL</span></div>
+        </div>
+
+        <!-- Bottom Left -->
+        <div class="corner-bottom-left">
+            <div>MODE</div>
+            <div>NAV</div>
+        </div>
+
+        <!-- Bottom Right -->
+        <div class="corner-bottom-right">
+            <div id="sys-time">14:27:33</div>
+            <div>UPTIME <span id="uptime">2d 4h</span></div>
+        </div>
+    </div>
+
+    <script>
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('sys-time').textContent = now.toTimeString().split(' ')[0];
+        }
+
+        function updateSystemData() {
+            // Simulate system metrics
+            document.getElementById('cpu-load').textContent = Math.floor(Math.random() * 40) + 10;
+            document.getElementById('mem-usage').textContent = Math.floor(Math.random() * 30) + 40;
+            document.getElementById('cpu-temp').textContent = Math.floor(Math.random() * 20) + 35;
+            document.getElementById('net-down').textContent = (Math.random() * 100).toFixed(1);
+            document.getElementById('net-up').textContent = (Math.random() * 50).toFixed(1);
+            document.getElementById('disk-usage').textContent = Math.floor(Math.random() * 20) + 40;
+            document.getElementById('proc-count').textContent = Math.floor(Math.random() * 50) + 200;
+            document.getElementById('load-avg').textContent = (Math.random() * 2).toFixed(2);
+            
+            // Flight instruments
+            document.getElementById('altitude').textContent = Math.floor(Math.random() * 100) + 600;
+            document.getElementById('speed').textContent = Math.floor(Math.random() * 100) + 350;
+            document.getElementById('heading').textContent = Math.floor(Math.random() * 360) + '°';
+        }
+
+        updateTime();
+        updateSystemData();
+        setInterval(updateTime, 1000);
+        setInterval(updateSystemData, 3000);
+    </script>
+</body>
+</html>
