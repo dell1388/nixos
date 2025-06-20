@@ -3,7 +3,7 @@
   pkgs,
   ...
 }: {
-imports=[./waybar.nix];
+imports=[./waybar.nix ./eww.nix];
   home.stateVersion = "23.11";
   stylix.targets = {
     fish.enable = false;
