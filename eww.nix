@@ -1,112 +1,57 @@
-{ config, pkgs, ... }:
-
 {
+  config,
+  pkgs,
+  ...
+}: {
   # Enable EWW
   programs.eww = {
     enable = true;
     package = pkgs.eww;
   };
 
-home.file.".config/eww/eww.yuck".text = ''
-    (defwidget fpv-widget []
-      (box :class "fpv" ""))
+  home.file.".config/fighter_hud.html".source = ./su30hud.html;
+  home.file.".config/eww/get-system-data.sh".source = pkgs.writeShellScriptBin "get-system-data.sh" ''
+    #!/usr/bin/env bash
+    cat << EOF
+    {
+      "cpu_load": $(top -bn1 | grep "Cpu(s)" | awk '{print $2}' | cut -d'%' -f1 | cut -d'u' -f1 | tr -d ' '),
+      "mem_usage": $(free | grep Mem | awk '{printf("%.0f", $3/$2 * 100.0)}'),
+      "cpu_temp": $(sensors | grep 'Core 0' | awk '{print $3}' | cut -d'+' -f2 | cut -d'°' -f1 | head -1),
+      "net_down": $(cat /sys/class/net/$(ip route | grep '^default' | awk '{print $5}' | head -1)/statistics/rx_bytes),
+      "net_up": $(cat /sys/class/net/$(ip route | grep '^default' | awk '{print $5}' | head -1)/statistics/tx_bytes),
+      "disk_usage": $(df -h / | awk 'NR==2{print $5}' | cut -d'%' -f1),
+      "proc_count": $(ps aux | wc -l),
+      "load_avg": $(uptime | awk -F'load average:' '{print $2}' | awk '{print $1}' | cut -d',' -f1),
+      "uptime": "$(uptime -p | sed 's/up //')",
+      "time": "$(date '+%H:%M:%S')"
+    }
+    EOF
+  '';
+  home.file.".config/eww/launch-hud.sh" = {
+    text = ''
+        #!/usr/bin/env bash
+      python3 -m http.server 8081 --directory $HOME/.config/eww/ --bind localhost &
 
-    (defwidget heading []
-      (box :class "section"
-        (label :class "label" "HEADING")
-        (box :class "circle" "273°")))
-
-    (defwidget system-readouts []
-      (box :class "readouts-container"
-        (box :class "section"
-          (label :class "label" "SYSTEM")
-          (label :class "value" "CPU 23%")
-          (label :class "value" "MEM 51%")
-          (label :class "value" "TMP 42°C"))
-        (box :class "section"
-          (label :class "label" "NETWORK")
-          (label :class "value" "NET ↓54.2")
-          (label :class "value" "NET ↑12.8")
-          (label :class "value" "DSK 46%"))
-        (box :class "section"
-          (label :class "label" "RANGE")
-          (label :class "value" "2.4KM"))
-        (box :class "section"
-          (label :class "label" "SYSTEM LOAD")
-          (label :class "value" "PROC 247")
-          (label :class "value" "LOAD 1.23"))
-        (box :class "section"
-          (label :class "label" "STATUS")
-          (label :class "value" "SYS STATUS: OPERATIONAL"))
-        (box :class "section"
-          (label :class "label" "MODE")
-          (label :class "value" "NAV"))
-        (box :class "section"
-          (label :class "label" "TIME")
-          (label :class "value" "14:27:33")
-          (label :class "value" "UPTIME 2d 4h"))))
-
-    (defwindow su30-hud
-      :monitor 0
-      :stacking "fg"
-      :windowtype "normal"
-      :wm-ignore false
-      (box :class "hud-container"
-        (fpv-widget)
-        (heading)
-        (system-readouts)))
+        ${pkgs.chromium}/bin/chromium --app="file://$HOME/.config/eww/fighter_hud.html" &
+    '';
+    executable = true;
+  };
+  home.file.".config/eww/eww.yuck".text = ''
+    # (defwindow hud-launcher
+    #      :monitor 0
+    #      :geometry (geometry :x "0" :y "0" :width "1" :height "1")
+    #      :stacking "fg"
+    #      :windowtype "desktop"
+    #      :wm-ignore true
+    #      (box
+    #        (button :onclick "~/.config/eww/launch-hud.sh"
+    #                :visible false
+    #                "")))
   '';
 
   home.file.".config/eww/eww.scss".text = ''
-    .hud-container {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 20px;
-      padding: 20px;
-      background: rgba(0, 255, 0, 0.1);
-      border: 2px solid #0f0;
-      border-radius: 10px;
-      font-family: 'Courier New', monospace;
-      color: #0f0;
-    }
-    .readouts-container {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .section {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      font-size: 14px;
-    }
-    .label {
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-    .value {
-      font-size: 16px;
-    }
-    .circle {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      border: 2px solid #0f0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-top: 5px;
-    }
-    .fpv {
-      width: 100px;
-      height: 100px;
-      background: #000;
-      border: 1px solid #0f0;
-    }
+    * {
+        all: unset;
+      }
   '';
-
-  home.packages = with pkgs; [
-    coreutils
-    procps
-  ];
-    }
+}
