@@ -6,6 +6,9 @@
   # Enable EWW
   programs.fish = {
     enable = true;
+    shellAbbrs = {
+    sgcpc = "cd ~/Documents/SGC/ && quickemu -vm windows-10.conf";
+    };
     interactiveShellInit = ''
     if status is-interactive
         fastfetch

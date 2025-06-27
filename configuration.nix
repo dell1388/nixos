@@ -261,6 +261,9 @@
     (python3.withPackages (python-pkgs:
       with python-pkgs; [
         tabulate
+        selenium
+        pip
+        pyperclip
       ]))
     gcc
     quickemu
