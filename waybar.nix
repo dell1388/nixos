@@ -65,7 +65,7 @@
 
         clock = {
           interval = 1;
-          format = "{:%H:%M:%S}";
+          format = "{:%H:%M:%S   %Y-%m-%d}";
         };
         "clock#c2".format = "{:%m-%d}";
         "custom/mt" = {
@@ -90,7 +90,7 @@
           on-click = "nm-connection-editor";
         };
         pulseaudio = {
-          format = "{volume}% {icon}   {format_source}";
+          format = "{volume}% {icon}     {format_source}";
           format-bluetooth = "{volume}% {icon}  {format_source}";
           format-bluetooth-muted = " {icon}  {format_source}";
           format-icons = {
